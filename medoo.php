@@ -503,7 +503,15 @@ class medoo
 						}
 						else if (is_int($column))
 						{
-							$stack[] = $this->column_quote($value);
+							//分割处理 by jorry
+							$value = trim($value);
+							if(substr($value, -3) == 'ASC') {
+								$stack[] = $this->column_quote(trim(substr($value, 0, (strlen($value)-3)))) . ' ASC';
+							} elseif(substr($value, -4) == 'DESC') {
+								$stack[] = $this->column_quote(trim(substr($value, 0, (strlen($value)-4)))) . ' DESC';
+							} else {
+								$stack[] = $this->column_quote($value);
+							}
 						}
 					}
 
@@ -511,7 +519,15 @@ class medoo
 				}
 				else
 				{
-					$where_clause .= ' ORDER BY ' . $this->column_quote($ORDER);
+					//分割处理 by jorry
+					$ORDER = trim($ORDER);
+					if(substr($ORDER, -3) == 'ASC') {
+						$where_clause .= ' ORDER BY ' . $this->column_quote(trim(substr($ORDER, 0, (strlen($ORDER)-3)))) . ' ASC';
+					} elseif(substr($ORDER, -4) == 'DESC') {
+						$where_clause .= ' ORDER BY ' . $this->column_quote(trim(substr($ORDER, 0, (strlen($ORDER)-4)))) . ' DESC';
+					} else {
+						$where_clause .= ' ORDER BY ' . $this->column_quote($ORDER);
+					}
 				}
 			}
 
